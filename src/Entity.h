@@ -6,6 +6,7 @@
 #include <map>
 #include "./Component.h"
 #include "./EntityManager.h"
+#include "./Constants.h"
 
 class EntityManager;
 
@@ -17,12 +18,14 @@ class Entity {
         std::map<const std::type_info*, Component*> componentTypeMap;
     public:
         std::string name;
+        constants::LayerType layer;
         Entity(EntityManager& manager);
-        Entity(EntityManager& manager, std::string name);
+        Entity(EntityManager& manager, std::string name, constants::LayerType layer);
         void Update(float deltaTime);
         void Render();
         void Destroy();
         bool IsActive() const;
+        void ListAllComponents() const;
 
         template <typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args) {

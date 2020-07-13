@@ -3,6 +3,7 @@
 
 #include "./Entity.h"
 #include "./Component.h"
+#include "./Constants.h"
 
 class EntityManager {
     private:
@@ -12,8 +13,9 @@ class EntityManager {
         void Update(float deltaTime);
         void Render();
         bool HasNoEntities();
-        Entity& AddEntity(std::string entityName);
+        Entity& AddEntity(std::string entityName, constants::LayerType layer);
         std::vector<Entity*> GetEntities() const;
+        std::vector<Entity*> GetEntitiesByLayer(constants::LayerType layer) const;
         unsigned int GetEntityCount();
 };
 #endif

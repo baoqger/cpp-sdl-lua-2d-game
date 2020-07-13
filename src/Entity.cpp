@@ -1,10 +1,11 @@
+#include <iostream>
 #include "./Entity.h"
 
 Entity::Entity(EntityManager& manager): manager(manager) {
     isActive = true;
 }
 
-Entity::Entity(EntityManager& manager, std::string name): manager(manager), name(name) {
+Entity::Entity(EntityManager& manager, std::string name, constants::LayerType layer): manager(manager), name(name), layer(layer) {
     isActive = true;
 }
 
@@ -26,4 +27,10 @@ void Entity::Destroy() {
 
 bool Entity::IsActive() const {
     return isActive;
+}
+
+void Entity::ListAllComponents() const {
+    for (auto mapElement : componentTypeMap) {
+        std::cout << "Component<" << mapElement.first->name() << ">" << std::endl;
+    }
 }
