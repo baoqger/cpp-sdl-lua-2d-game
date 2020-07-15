@@ -1,4 +1,6 @@
 #include "./EntityManager.h"
+#include "./Collision.h"
+#include "./Components/ColliderComponent.h"
 
 void EntityManager::ClearData() {
     for (auto& entity: entities  ) {
@@ -32,6 +34,22 @@ std::vector<Entity*> EntityManager::GetEntitiesByLayer(constants::LayerType laye
         }
     }
     return selectedEntities;
+}
+
+std::string EntityManager::CheckEntityCollisions(Entity &myEntity) const {
+    ColliderComponent* myCollider = myEntity.GetComponent<ColliderComponent>();
+    for (auto &entity: entities) {
+        if (entity->name.compare(myEntity.name) != 0 && entity->name.compare("Tile") != 0 ) {
+            if (entity->HasComponent<ColliderComponent>()) {
+                ColliderComponent* otherCollider = entity->GetComponent<ColliderComponent>();
+                if (Collision::CheckRectangleCollision(myCollider->collider, otherCollider->collider)) {
+                    return otherCollider->colliderTag;
+                }
+            } 
+        }
+
+    }
+    return std::string();
 }
 
 Entity& EntityManager::AddEntity(std::string entityName, constants::LayerType layer) {

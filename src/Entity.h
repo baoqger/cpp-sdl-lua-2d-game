@@ -39,6 +39,11 @@ class Entity {
         }
 
         template <typename T>
+        bool HasComponent() {
+            return componentTypeMap.count(&typeid(T));
+        }
+
+        template <typename T>
         T* GetComponent() {
             return static_cast<T*>(componentTypeMap[&typeid(T)]);
         }
