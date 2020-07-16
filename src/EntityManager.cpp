@@ -36,6 +36,50 @@ std::vector<Entity*> EntityManager::GetEntitiesByLayer(constants::LayerType laye
     return selectedEntities;
 }
 
+constants::CollisionType EntityManager::CheckCollisions() const {
+    for (auto &thisEntity: entities) {
+        if (thisEntity->HasComponent<ColliderComponent>()) {
+            ColliderComponent* thisCollider = thisEntity->GetComponent<ColliderComponent>();
+            for (auto &thatEntity: entities) {
+                if (
+                    thatEntity->HasComponent<ColliderComponent>() &&
+                    thisEntity->name.compare(thatEntity->name) != 0
+                ) {
+                    ColliderComponent* thatCollider = thatEntity->GetComponent<ColliderComponent>();
+                    if (Collision::CheckRectangleCollision(thisCollider->collider, thatCollider->collider)) {
+                        if (
+                            thisCollider->colliderTag.compare("PLAYER") == 0 &&
+                            thatCollider->colliderTag.compare("ENEMY") == 0
+                        ) {
+                            return constants::PLAYER_ENEMY_COLLISION;
+                        }
+                        if (
+                            thisCollider->colliderTag.compare("PLAYER") == 0 &&
+                            thatCollider->colliderTag.compare("PROJECTILE") == 0
+                        ) {
+                            return constants::PLAYER_PROJECTILE_COLLISION;
+                        }
+                        if (
+                            thisCollider->colliderTag.compare("ENEMY") == 0 &&
+                            thatCollider->colliderTag.compare("FRIENDLY_PROJECTILE") == 0                            
+                        ) {
+                            return constants::ENEMY_PROJECTILE_COLLISION;
+                        }
+                        if (
+                            thisCollider->colliderTag.compare("PLAYER") == 0 &&
+                            thatCollider->colliderTag.compare("LEVEL_COMPLETE") == 0                            
+                        ) {
+                            return constants::PLAYER_LEVEL_COMPLETE_COLLISION;
+                        }                        
+                    }
+                }
+            }
+        }
+        return constants::NO_COLLISION;
+    }
+}
+
+// retired method
 std::string EntityManager::CheckEntityCollisions(Entity &myEntity) const {
     ColliderComponent* myCollider = myEntity.GetComponent<ColliderComponent>();
     for (auto &entity: entities) {
