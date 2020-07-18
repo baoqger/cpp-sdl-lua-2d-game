@@ -19,5 +19,6 @@ class EntityManager {
         unsigned int GetEntityCount();
         std::string CheckEntityCollisions(Entity& entity) const; // retired method
         constants::CollisionType CheckCollisions() const;
+        void DestroyInactiveEntities();
 };
 #endif
