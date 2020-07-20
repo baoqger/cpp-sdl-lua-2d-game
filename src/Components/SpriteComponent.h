@@ -25,10 +25,16 @@ class SpriteComponent: public Component {
     public:
         SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
-        SpriteComponent(const char* filePath) {
-            isAnimated = false;
-            isFixed = false;
-            SetTexture(filePath);
+        SpriteComponent(std::string assetTextureId) {
+            this->isAnimated = false;
+            this->isFixed = false;
+            SetTexture(assetTextureId);
+        }
+
+        SpriteComponent(std::string assetTextureId, bool isFixed) {
+            this->isAnimated = false;
+            this->isFixed = isFixed;
+            SetTexture(assetTextureId);
         }
 
         SpriteComponent(std::string id, int numFrames, int animationSpeed, bool hasDirections, bool isFixed) {
